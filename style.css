@@ -1,0 +1,51 @@
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #0078d4;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+}
+
+.login-container,
+#contact-form,
+#contact-list {
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+input,
+button {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
