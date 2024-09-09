@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DataTables Row Editing</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
     <style>
-        .edit-input {
-            width: 100%;
-            box-sizing: border-box;
-        }
+      .edit-input {
+        width: 100%;
+        box-sizing: border-box;
+      }
     </style>
-</head>
-<body>
-    <table id="contactTable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Locality</th>
-                <th>Family Members</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data will be dynamically populated -->
-        </tbody>
+  </head>
+  <body>
+    <table id="contactTable" class="display" style="width: 100%">
+      <thead>
+        <tr>
+          <th>ContactId</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Locality</th>
+          <th>LastMeeting</th>
+          <th>NOtes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be dynamically populated -->
+      </tbody>
     </table>
 
     <!-- jQuery and DataTables scripts -->
@@ -35,5 +40,5 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.jqueryui.min.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
