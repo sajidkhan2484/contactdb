@@ -1,8 +1,4 @@
-// script.js
-const clientId = "2310956b-ced0-472b-8794-5f9d029b8573"; // Azure AD Application (client) ID
-const tenantId = "8b280b8e-cb5f-4c0b-9eda-f69bf4b498bc"; // Azure AD Tenant ID
-const clientSecret = "4o_8Q~HVFzTdVNJ0VeOaZ.WECq2BQEvFBUxpnbbu"; // Secret created in Azure AD
-const siteUrl = "https://itechsolution.sharepoint.com/sites/PakizaMasjid"; // SharePoint site URL
+var dataContacts = [];
 $(document).ready(function () {
   // Dummy login validation
   $("#login-form").on("submit", function (e) {
@@ -16,94 +12,83 @@ $(document).ready(function () {
     }
   });
 
-  // Function to get an access token using client credentials
-  async function getAccessToken() {
-    const tokenEndpoint = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
-
-    const response = await fetch(tokenEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        client_id: clientId,
-        scope: "https://graph.microsoft.com/.default",
-        client_secret: clientSecret,
-        grant_type: "client_credentials",
-      }),
-    });
-
-    const data = await response.json();
-    return data.access_token;
-  }
-
-  // Function to fetch SharePoint data
-  async function fetchSharePointData() {
-    const accessToken = await getAccessToken();
-
-    // SharePoint REST API endpoint to get list items
-    const apiEndpoint = `${siteUrl}/_api/web/lists/getbytitle('contacts')/items`;
-
-    const response = await fetch(apiEndpoint, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json;odata=verbose",
-      },
-    });
-
-    const data = await response.json();
-    console.log(data); // Log data or update the UI as needed
-  }
-
   // Load contacts when the page loads
-   loadContacts();
+  loadContacts();
   // Call function to fetch SharePoint data
   //fetchSharePointData().catch(console.error);
-
-  // Save Contact
-  $("#form-contact").on("submit", function (e) {
-    e.preventDefault();
-    const contact = {
-      ID: $("#contact-id").val(),
-      Name: $("#name").val(),
-      Phone: $("#phone").val(),
-      Address: $("#address").val(),
-      Locality: $("#locality").val(),
-      FamilyMembers: $("#family-members").val(),
-    };
-    if (contact.ID) {
-      updateContact(contact);
-    } else {
-      createContact(contact);
-    }
+  const table = $("#contactTable").DataTable({
+    data: dataContacts,
+    columns: [
+      { data: "ContactId" },
+      { data: "Name" },
+      { data: "Phone" },
+      { data: "Address" },
+      { data: "Locality" },
+      { data: "LastMeeting" },
+      { data: "notes" },
+      {
+        data: null,
+        defaultContent: '<button class="edit-btn">Edit</button>',
+        orderable: false,
+      },
+    ],
   });
 
-  // Search contacts
-  $("#search").on("keyup", function () {
-    const query = $(this).val().toLowerCase();
-    $("#contacts-table tr").filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(query) > -1);
-    });
+  // Function to make a row editable
+  function makeRowEditable(row) {
+    const data = table.row(row).data();
+    const rowData = `
+        <td><input type="text"  class="edit-input" value="${data.ContactId}" readonly /></td>    
+        <td><input type="text" class="edit-input" value="${data.Name}" /></td>
+        <td><input type="text" class="edit-input" value="${data.Phone}" /></td>
+        <td><input type="text" class="edit-input" value="${data.Address}" /></td>
+        <td><input type="text" class="edit-input" value="${data.Locality}" /></td>
+        <td><input type="text" class="edit-input" value="${data.LastMeeting}" /></td>
+        <td><input type="text" class="edit-input" value="${data.notes}" /></td>
+        <td>
+            <button class="save-btn">Save</button>
+            <button class="cancel-btn">Cancel</button>
+        </td>
+    `;
+    $(row).html(rowData);
+  }
+
+  // Event listener for edit button
+  $("#contactTable tbody").on("click", ".edit-btn", function () {
+    const row = $(this).closest("tr");
+    makeRowEditable(row);
+  });
+
+  // Event listener for save button
+  $("#contactTable tbody").on("click", ".save-btn", function () {
+    const row = $(this).closest("tr");
+    const inputs = row.find("input");
+    const updatedData = {
+      Name: inputs.eq(1).val(),
+      Phone: inputs.eq(2).val(),
+      Address: inputs.eq(3).val(),
+      Locality: inputs.eq(4).val(),
+      LastMeeting: inputs.eq(5).val(),
+      notes: inputs.eq(6).val(),
+    };
+
+    // Update the row data in DataTable
+    table.row(row).data(updatedData).draw();
+
+    // Optionally, save data to server or JSON file
+    console.log("Updated Data:", updatedData);
+  });
+
+  // Event listener for cancel button
+  $("#contactTable tbody").on("click", ".cancel-btn", function () {
+    table.draw();
   });
 });
 
-
 function loadContacts() {
-    $.getJSON('data.json', function(data) {
-        $('#contact-list').empty();
-        data.contacts.forEach(function(contact) {
-            $('#contact-list').append(`
-                <div class="contact">
-                    <h3>${contact.name}</h3>
-                    <p>${contact.phone}</p>
-                    <p>${contact.address}</p>
-                    <button class="edit-contact">Edit</button>
-                    <button class="delete-contact">Delete</button>
-                </div>
-            `);
-        });
-    });
+  $.getJSON("data.json", function (data) {
+    dataContacts = data;
+  });
 }
 
 // Dummy function to load contacts - Replace this with SharePoint integration
