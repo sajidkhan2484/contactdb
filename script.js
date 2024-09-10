@@ -68,6 +68,7 @@ $(document).ready(function () {
     const row = $(this).closest("tr");
     const inputs = row.find("input");
     const updatedData = {
+      ContactId: inputs.eq(0).val(),
       Name: inputs.eq(1).val(),
       Phone: inputs.eq(2).val(),
       Address: inputs.eq(3).val(),
