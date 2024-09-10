@@ -16,27 +16,26 @@ $(document).ready(function () {
   //loadContacts();
   // Call function to fetch SharePoint data
   //fetchSharePointData().catch(console.error);
-
+  var table = "";
   $.getJSON("data.json", function (data) {
     dataContacts = data.contacts;
-  });
-
-  const table = $("#contactTable").DataTable({
-    data: dataContacts,
-    columns: [
-      { data: "ContactId" },
-      { data: "Name" },
-      { data: "Phone" },
-      { data: "Address" },
-      { data: "Locality" },
-      { data: "LastMeeting" },
-      { data: "notes" },
-      {
-        data: null,
-        defaultContent: '<button class="edit-btn">Edit</button>',
-        orderable: false,
-      },
-    ],
+    table = $("#contactTable").DataTable({
+      data: dataContacts,
+      columns: [
+        { data: "ContactId" },
+        { data: "Name" },
+        { data: "Phone" },
+        { data: "Address" },
+        { data: "Locality" },
+        { data: "LastMeeting" },
+        { data: "notes" },
+        {
+          data: null,
+          defaultContent: '<button class="edit-btn">Edit</button>',
+          orderable: false,
+        },
+      ],
+    });
   });
 
   // Function to make a row editable
